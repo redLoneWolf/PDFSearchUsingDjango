@@ -1,3 +1,5 @@
+
+{% load humanize %}
 <!doctype html>
 <html lang="en">
 
@@ -6,6 +8,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <style>
+        .dropdown-menu {
+            width: auto !important;
+            height: auto !important;
+        }
+    </style>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
@@ -24,19 +32,28 @@
         <a class="navbar-brand " style="margin-left: 5%;">PDF Search</a>
 
         {% if history %}
-            <div class="nav-item dropdown">
-              <button class="btn dropdown-toggle"  id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="nav-item dropdown">
+            <button class="btn dropdown-toggle" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
                 History
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
                 {% for hist in history %}
 
-                <li><a class="dropdown-item" href="{% url 'search:home' %}?historyq={{ hist.keyText }}" >{{ hist.keyText }}</a></li>
+                <li>
+                    <a class="dropdown-item " href="{% url 'search:home' %}?historyq={{ hist.keyText }}"> 
+                        <div class="row">
+                            <div class="font-weight-bold col-12">{{ hist.keyText }}</div><small class="text-muted col-12">{{ hist.created|naturaltime }} </small>
+                        </div>
+                        
+                        
+                    </a>
+                </li>
 
                 {% endfor %}
-              </ul>
-            </div>
-            {% endif %}
+            </ul>
+        </div>
+        {% endif %}
 
         <div class="form-group mr-auto row" style="width: 30%;">
             <div class="col">
@@ -69,7 +86,7 @@
             {% endfor %}
         </div>
     </div>
-<script>
+    <script>
         $.fn.enterKey = function (fnc) {
             return this.each(function () {
                 $(this).keypress(function (ev) {
@@ -94,22 +111,22 @@
         //        alert("bell")
         //     } 
 
-         search = "{{ request.GET.search }}";
-         historyq = "{{ request.GET.historyq }}";
+        search = "{{ request.GET.search }}";
+        historyq = "{{ request.GET.historyq }}";
 
-            if (search != '') {
+        if (search != '') {
 
-               $('#id_search').val(search);
-            }else if(historyq != ''){
-                $('#id_search').val(historyq);
-            }
+            $('#id_search').val(search);
+        } else if (historyq != '') {
+            $('#id_search').val(historyq);
+        }
 
 
         if ($('#id_search').val() != '') {
-                $('#search-btn').attr('disabled', false);
-            } else {
-                $('#search-btn').attr('disabled', true);
-            }
+            $('#search-btn').attr('disabled', false);
+        } else {
+            $('#search-btn').attr('disabled', true);
+        }
 
         $('#id_search').on('keyup', function () {
 
@@ -137,4 +154,5 @@
         }
     </script>
 </body>
+
 </html>
