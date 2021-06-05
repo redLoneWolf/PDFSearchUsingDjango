@@ -19,25 +19,31 @@ def get_pdf_paths():
     return os.path.join(settings.MEDIA_ROOT, "pdfs")
 
 
-for filename in os.listdir(get_pdf_paths()):
-    if filename.endswith(".pdf"): 
-        # print(os.path.join(get_pdf_paths(), filename))
-        file_paths.append(os.path.join(get_pdf_paths(), filename))
-
-
-# image_urls=[]
-# pdfs = []
-
-
-
-
+if os.path.isdir(get_pdf_paths()):
+    for filename in os.listdir(get_pdf_paths()):
+        if filename.endswith(".pdf"): 
+            file_paths.append(os.path.join(get_pdf_paths(), filename))
+else:      
+    print()
+    print("Warning ! Save your pdf files in ",get_pdf_paths())
+    print()
+    
+    
         
 def searchAll(text):
+
+
     searchq = Search.objects.create(keyText=text)
 
     qs = []
     pgs=[]
     found_in_files = []
+
+    if len(file_paths)<=0:
+        print()
+        print("Warning ! Save your pdf files in ",get_pdf_paths())
+        print()
+
     for fname in file_paths:
         doc = fitz.open(fname)
         for page in doc:
